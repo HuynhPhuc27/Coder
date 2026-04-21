@@ -10,6 +10,7 @@ const NavBar = () => {
   const links = [
     {name: "Dashboard", href: '/'},
     {name: "Issue", href: '/issue'},
+    {name: "Users", href: '/users'},
   ]  
   return (
     <nav className="flex flex-wrap gap-8 border-b-2 mb-5 px-5 h-14 items-center border-gray-300">

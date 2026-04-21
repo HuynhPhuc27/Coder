@@ -1,5 +1,5 @@
 {
-  "name": "beginning",
+  "name": "restaurantstore",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,19 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@prisma/client": "^6.19.3",
-    "@radix-ui/themes": "^3.3.0",
-    "axios": "^1.7.9",
-    "classnames": "^2.3.2",
-    "easymde": "^2.20.0",
     "next": "16.2.4",
-    "prisma": "^6.19.3",
     "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "react-hook-form": "^7.72.1",
-    "react-icons": "^4.11.0",
-    "react-simplemde-editor": "^5.2.0",
-    "zod": "^3.22.2"
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
