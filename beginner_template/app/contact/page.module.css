@@ -1,3 +1,61 @@
 .container{
-    background-color: blueviolet;
+
 }
+
+.content{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.title{
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 1rem;
+}
+
+.imgContainer{
+    position: relative;
+    height: 500px;
+    flex: 1;
+}
+
+.img{
+    object-fit: cover;
+    
+    border-radius: 50%;
+    
+    animation: scaleInOut 3s ease-in-out infinite;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+.input, .textArea{
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: transparent;
+    outline: none;
+    width: 500px;
+}
+
+@keyframes scaleInOut{
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+

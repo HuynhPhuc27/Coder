@@ -1,3 +1,36 @@
-.container{
-    background-color: blueviolet;
+.link{
+    display: flex;
+    margin-bottom: 30px;
+    margin-top: 20px;
+    gap: 50px;
+    align-items: center;
+}
+
+.imgContainer{
+    position: relative;
+    
+}
+.img{
+    object-fit: cover;
+    
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 800px;
+    justify-content: center;
+}
+
+
+.title{
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+.desc{
+    font-size: 18px;
+    color: #999;
 }

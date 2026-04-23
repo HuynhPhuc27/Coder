@@ -36,3 +36,17 @@ body {
   flex-direction: column;
   justify-content: space-between;
 }
+
+.light{
+  background-color: #ffffff;
+  color: #171717;
+}
+
+.dark{
+  background-color: #171717;
+  color: #c6bebe;
+}
+
+.theme{
+  transition: all 1s ease;
+}

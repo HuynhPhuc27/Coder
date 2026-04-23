@@ -1,3 +1,55 @@
 .container{
-    background-color: blueviolet;
+
+}
+
+.mainTitle{
+  font-size: 100px;
+  font-weight: bold;
+}
+
+.selectTitle{
+  margin: 20px 0px;
+}
+
+.items{
+  display: flex;
+  gap: 20px;
+}
+
+.item{
+    width: 300px;
+    height: 400px;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    border: 5px solid #b8b3b3;
+    border-radius: 5px;
+    position: relative;
+    background-size: cover;
+}
+
+.item:nth-child(1){
+    background-image: url("https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"); 
+}
+
+.item:nth-child(2){
+    background-image: url("https://images.pexels.com/photos/13079475/pexels-photo-13079475.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"); 
+}
+
+.item:nth-child(3){
+    background-image: url("https://images.stockcake.com/public/a/9/3/a93d626b-b6ac-4769-b917-66524861c2fd_large/sunset-beach-view-stockcake.jpg"); 
+}
+.title{
+    position: absolute;
+    bottom: 20px;
+    font-size: 24px;
+    left: 50%;
+    font-weight: bold;
+    padding: 5px;
+    color: white;
+    border-radius: 5px;
+}
+
+.item:hover .title{
+    color: rgba(21, 245, 222, 0.5);
 }

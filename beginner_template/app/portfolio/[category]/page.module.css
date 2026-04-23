@@ -1,0 +1,50 @@
+.container{
+       
+}
+
+.item{
+    display: flex;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    gap: 50px;
+}
+.imgContainer{
+    height: 400px;
+    position: relative;
+    flex: 1;
+
+}
+
+.catTitle{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    color: rgb(19, 130, 115);
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: capitalize;
+
+}
+.content{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+
+}
+.title{
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.desc{
+    font-size: 16px;
+}
+.img{
+    object-fit: fit;
+}
+
+.item:nth-child(2n){
+    flex-direction: row-reverse;
+}
