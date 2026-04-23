@@ -8,3 +8,5 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+//mongodb+srv://phucdth225725_db_user:Hphuc2702@beginningdb.qqbpsou.mongodb.net/
