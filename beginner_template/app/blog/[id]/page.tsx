@@ -2,25 +2,52 @@ import React from 'react'
 import styles from './page.module.css'
 import Image from 'next/image'
 
-const BlogPost = () => {
+import type { Metadata, ResolvingMetadata } from 'next'
+
+type Props = {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+async function getData(id: string) {
+  const res = await fetch(`http://localhost:3000/api/posts/${id}`, { cache: 'no-store' });
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
+  }
+  return res.json()
+}
+
+ 
+export async function generateMetadata({ params, searchParams }: Props, parent: ResolvingMetadata): Promise<Metadata> {
+  const { id } = await params
+ 
+  const res = await fetch(`http://localhost:3000/api/posts/${id}`).then((res) => res.json()) 
+  return {
+    title: res.title
+  }
+}
+
+const BlogPost = async ({params}: Props) => {
+  const { id } = await params;
+  const data = await getData(id)
   return (
     <div className={styles.container}>
       <div className={styles.top}>
         <div className={styles.info}>
-          <h1 className={styles.title}>The Power of Strong Brand Identity</h1>
+          <h1 className={styles.title}>{data.title}</h1>
           <p className={styles.desc}>
-            A strong brand identity is more than just a logo—it’s the personality of your business. In this blog, we explore how colors, typography, and consistent design can help build trust, attract customers, and make your brand stand out in today’s competitive digital world.
+            {data.desc} 
           </p>
 
           <div className={styles.author}>
             <Image
-              src="https://i.guim.co.uk/img/media/9f9fa3cffd417e29f934c570116a4e703cefb855/0_440_4732_2840/master/4732.jpg?width=465&dpr=1&s=none&crop=none"
+              src={data.img}
               alt=""
               width={50}
               height={50}
               className={styles.avatar}
             />
-            <span className={styles.username}>John Doe</span>
+            <span className={styles.username}>{data.username}</span>
           </div>
         </div>
         <div className={styles.imgContainer}>
