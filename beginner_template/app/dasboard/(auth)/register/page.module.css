@@ -1,0 +1,33 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form{
+    display: flex;
+    width: 300px;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.input{
+    border: 2px solid #bbb;
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: transparent;
+}
+
+.register{
+    width: 300px;
+    padding: 10px;
+    font-size: 20px;
+    color: white;
+    background-color: #34bc91;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
