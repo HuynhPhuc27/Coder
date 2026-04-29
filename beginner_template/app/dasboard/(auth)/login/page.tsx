@@ -1,12 +1,25 @@
 'use client';
-import { signIn } from 'next-auth/react'
-import React, {useState} from 'react'
+import { signIn, useSession } from 'next-auth/react'
+import React, {useState, useEffect} from 'react'
 import styles from './page.module.css'
 import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const [err, setErr] = useState("");
+  const session = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (session.status === "authenticated"){
+      router.push("/dasboard/");
+    }
+  }, [session.status, router]); 
+
+  if (session.status === "loading"){
+    return <p>Loading ....</p>;
+  }
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
