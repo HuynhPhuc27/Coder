@@ -41,11 +41,9 @@ const Menu = () => {
                 <Link href = "/orders" onClick={() => setOpen(false)}>Orders</Link>
             )}
 
-
-            <Link href="/cart">
+            <div onClick={() => setOpen(false)}>
                 <CartIcon />
-            </Link>
-
+            </div>
         </div>)}
     </div>
   );
