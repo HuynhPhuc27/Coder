@@ -7,7 +7,7 @@ import Image from 'next/image';
 const Navbar = () => {
   const user = false;
   return (
-    <div className='h-12 flex text-red-500 p-4 items-center justify-between border-b-2 border-red-500 uppercase md:h-24 lg:px-20 xl:p-40s'>
+    <div className='h-12 flex text-red-500 p-4 items-center justify-between border-b-2 border-red-500 uppercase md:h-24 lg:px-20 xl:px-40'>
       {/* LEFT LINKS */}
       <div className='hidden md:flex gap-4 flex-1'>
         <Link href="/">Hompage</Link>
