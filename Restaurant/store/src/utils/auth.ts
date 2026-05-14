@@ -1,12 +1,15 @@
 
-import NextAuth, { NextAuthOptions } from "next-auth"
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import NextAuth, { getServerSession, NextAuthOptions } from "next-auth"
 import Google from "next-auth/providers/google"
+import { prisma } from "./connec"
 /*import connectDB from "./utils/db"
 import User from "./models/User";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";*/
 
 export const authOptions:NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     Google({
       clientId: process.env.GOOGLE_ID as string,
@@ -60,3 +63,5 @@ export const authOptions:NextAuthOptions = {
   }*/
 ]
 }
+
+export const getAuthSession = () => getServerSession(authOptions);

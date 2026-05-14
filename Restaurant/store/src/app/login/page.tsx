@@ -2,13 +2,26 @@
 import { signIn, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useEffect } from 'react'
 
 
 const Loginpage = () => {
   const {data, status} = useSession();
   console.log("Data: " + data);
   console.log("Status: " + status);
+  const router = useRouter();
+  
+
+  useEffect(() => {
+    if (status === "authenticated"){
+    router.push("/");
+  }
+  }, [status, router])
+
+  if (status === "loading"){
+    return <p>Loading ...</p>
+  }
   
   return (
     <div className='h-[calc(100vh-9rem)] md:h-[calc(100vh-9rem)] flex justify-center items-center p-4'>
