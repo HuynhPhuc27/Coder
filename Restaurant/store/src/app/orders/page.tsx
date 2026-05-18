@@ -12,16 +12,52 @@ const OtherPage = () => {
     if (status === "unauthenticated"){
       router.push("/");
     }
-  })
-  const { isPending, error, data } = useQuery({
+  }, [status, router])
+  const { isLoading, error, data } = useQuery({
     queryKey: ['orders'], 
-    queryFn: () =>
-      fetch('http://localhost:3000/api/orders').then((res) =>
-        res.json(),
-      ),
+    queryFn: async () => {
+      const res = await fetch('/api/orders', {
+        credentials: 'same-origin',
+      })
+      if (!res.ok) {
+        const message = await res.text()
+        throw new Error(message || 'Failed to load orders')
+      }
+      return res.json()
+    },
   })
 
-  if (isPending || status ==="loading") return 'Loading...'
+  const handleUpdate = async (e: React.FormEvent<HTMLFormElement>, id: string) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const input = form.elements[0] as HTMLInputElement;
+
+    const status = input.value;
+    try {
+      const res = await fetch(`/api/orders/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) {
+        const message = await res.text();
+        throw new Error(message || "Failed to update order");
+      }
+      // Optionally, you can refetch the orders after a successful update
+      // queryClient.invalidateQueries(['orders']);
+    } catch (err: any) {
+      console.error(err);
+      alert(err.message || "An error occurred while updating the order");
+    }
+  }
+
+
+  if (isLoading || status === "loading") return 'Loading...'
+  
+  if (error) return <div className='p-4 text-red-600'>Unable to load orders. {error instanceof Error ? error.message : ''}</div>
+  if (!Array.isArray(data)) return <div className='p-4'>No orders available.</div>
 
   return (
     <div className='p-4 lg:px-20 xl:px-40'>
@@ -36,14 +72,28 @@ const OtherPage = () => {
           </tr>
         </thead>
         <tbody>
-          { data.map((item: OrderType) => (
-            <tr className='text-sm md:text-base bg-red-100 key={item.id}'>
-            <td className='hidden md:block px-1 py-6'>1237861238721</td>
-            <td className='px-1 py-6'>19.07.2023</td>
-            <td className='px-1 py-6'>89.90</td>
-            <td className='hidden md:block px-1 py-6'>Big Burger Menu (2), Veggie Pizza (2), Coca Cola 1L (2)</td>
-            <td className='px-1 py-6'>On the way (approx. 10min)...</td>
-          </tr>
+          {data.map((item: OrderType) => (
+            <tr key={item.id} className='text-sm md:text-base bg-red-100'>
+              <td className='hidden md:block px-1 py-6'>{item.id}</td>
+              <td className='px-1 py-6'>{item.createdAt.toString().slice(0, 10)}</td>
+              <td className='px-1 py-6'>{item.price}</td>
+              <td className='hidden md:block px-1 py-6'>
+                 {item.products[0].title}
+              </td>
+              {
+                session?.user?.isAdmin ? (
+                  <td>
+                    <form className='flex justify-center items-center gap-4' onSubmit={(e) => handleUpdate(e, item.id)}>
+                      <input placeholder={item.status} className='p-2 ring-1 ring-red-100 rounded-md'/>
+                      <button className='bg-red-400 p-2 rounded-full cursor-pointer'>
+                        <img src="/edit.png" alt="Edit" width={20} height={20}/>
+                      </button>
+                    </form>
+                  </td>
+                ) : (
+                  <td className='px-1 py-6'>{item.status}</td>
+              )}
+            </tr>
           ))}
         </tbody>
       </table>

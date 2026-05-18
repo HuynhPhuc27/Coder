@@ -1,5 +1,5 @@
 export type MenuType = {
-  id: number;
+  id: string;
   slug: string;
   title: string;
   desc?: string;
@@ -8,7 +8,7 @@ export type MenuType = {
 }[];
 
 export type ProductType = {
-  id: number;
+  id: string;
   title: string;
   desc?: string;
   img?: string;
@@ -17,11 +17,20 @@ export type ProductType = {
 };
 
 export type OrderType = {
-  id: number;
+  id: string;
   userEmail: string;
   price: number;
-  products: object[];
+  products: CartItemType[];
   status: string;
   intent_id?: string;
   createdAt: Date;
+};
+
+export type CartItemType = {
+  id: string;
+  title: string;
+  price: number;
+  img?: string;
+  optionTitle?: string;
+  quantity: number;
 };

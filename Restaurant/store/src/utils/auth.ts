@@ -24,6 +24,7 @@ declare module "next-auth/jwt"{
 
 export const authOptions:NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
+  secret: process.env.NEXTAUTH_SECRET ?? process.env.SECRET ?? "dev-nextauth-secret-please-change",
   session:{
     strategy:"jwt"
   },
