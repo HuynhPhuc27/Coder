@@ -1,9 +1,10 @@
 'use client'
 import { OrderType } from '@/types/types'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient} from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 const OtherPage = () => {
   const {data:session, status} = useSession();
@@ -27,14 +28,34 @@ const OtherPage = () => {
     },
   })
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: ({ id, status }: { id: string; status: string }) => {
+      return fetch(`http://localhost:3000/api/orders/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:   ['orders']});
+    }
+  });
+
+
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>, id: string) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const input = form.elements[0] as HTMLInputElement;
 
     const status = input.value;
+    mutation.mutate({ id, status });
+    toast.success("Order updated successfully");
     try {
-      const res = await fetch(`/api/orders/${id}`, {
+      const res = await fetch(`http://localhost:3000/api/orders/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -55,6 +76,7 @@ const OtherPage = () => {
 
 
   if (isLoading || status === "loading") return 'Loading...'
+
   
   if (error) return <div className='p-4 text-red-600'>Unable to load orders. {error instanceof Error ? error.message : ''}</div>
   if (!Array.isArray(data)) return <div className='p-4'>No orders available.</div>
@@ -73,7 +95,7 @@ const OtherPage = () => {
         </thead>
         <tbody>
           {data.map((item: OrderType) => (
-            <tr key={item.id} className='text-sm md:text-base bg-red-100'>
+            <tr key={item.id} className={`${item.status === "preparing" ? "bg-yellow-100" : item.status === "delivered" ? "bg-green-100" : "bg-red-100"} rounded-lg`}>
               <td className='hidden md:block px-1 py-6'>{item.id}</td>
               <td className='px-1 py-6'>{item.createdAt.toString().slice(0, 10)}</td>
               <td className='px-1 py-6'>{item.price}</td>
@@ -84,7 +106,7 @@ const OtherPage = () => {
                 session?.user?.isAdmin ? (
                   <td>
                     <form className='flex justify-center items-center gap-4' onSubmit={(e) => handleUpdate(e, item.id)}>
-                      <input placeholder={item.status} className='p-2 ring-1 ring-red-100 rounded-md'/>
+                      <input placeholder={item.status} className='p-2 ring-1 ring-red-100 rounded-md bg-white'/>
                       <button className='bg-red-400 p-2 rounded-full cursor-pointer'>
                         <img src="/edit.png" alt="Edit" width={20} height={20}/>
                       </button>

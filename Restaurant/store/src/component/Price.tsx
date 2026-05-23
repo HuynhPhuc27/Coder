@@ -1,28 +1,48 @@
 'use client'
+import { ProductType } from '@/types/types';
+import { useCartStore } from '@/utils/store';
 import { constants } from 'buffer';
 import React, { useEffect, useState } from 'react'
-type Props = {
-    price: number;
-    id: number;
-    options?: { title: string; additionalPrice: number }[];
-}
-const Price = ({price, id, options}: Props) => {
-    const [total, setTotal] = useState(price);
+import { toast } from 'react-toastify';
+
+const Price = ({product}: { product: ProductType }) => {
+    const [total, setTotal] = useState(product.price);
     const [quantity, setQuantity] = useState(1);
     const [selected, setSelected] = useState(0);
 
+    const {addToCart} = useCartStore();
     useEffect(() => {
-        setTotal(
-            quantity * (options ? price+options[selected].additionalPrice : price)
-        )
-    }, [quantity, selected])
+        useCartStore.persist.rehydrate();
+    }, [])
+
+    useEffect(() => {
+        if (product.options?.length){
+            setTotal(
+                quantity * (Number(product.price) + Number(product.options[selected].additionalPrice))
+            );
+        }
+    }, [quantity, selected, product])
+
+    const handleCart = () => {
+        addToCart({
+            id: product.id,
+            title: product.title,
+            price: total,
+            img: product.img,
+            ...(product.options?.length && {
+                optionTitle: product.options[selected].title
+            }),
+            quantity: quantity
+        })
+        toast.success("Added to cart!")
+    }
 
   return (
     <div className='flex flex-col gap-4'>
-        <h1 className='font-bold text-2xl'>${total.toFixed(2)}</h1>
+        <h1 className='font-bold text-2xl'>${total}</h1>
         {/* OPTIONS */}
         <div className='flex gap-4'>
-            {options?.map((option, index) => (
+            {product.options?.length && product.options.map((option, index) => (
                 <button key={option.title} 
                         className='min-w-25 ring-1 ring-red-500 rounded-md p-2 cursor-pointer'
                         style={{
@@ -46,7 +66,10 @@ const Price = ({price, id, options}: Props) => {
                     <button className='cursor-pointer' onClick={() => setQuantity(prev => (prev < 9) ? prev+1 : 9)}>{'>'}</button>
                 </div>
             </div>
-            <button className='ring-1 w-56 ring-red-500 bg-red-500 text-white p-3'>Add to Cart</button>
+            <button className='ring-1 w-56 ring-red-500 bg-red-500 text-white p-3' 
+                    onClick={handleCart}>
+                Add to Cart
+            </button>
         </div>
         
     </div>
