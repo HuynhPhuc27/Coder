@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 type Option = {
-    optTitle: string;
+    title: string;
     additionalPrice: number;
 }
 
@@ -25,7 +25,7 @@ const page = () => {
     });
 
     const [option, setOption] = useState<Option>({
-        optTitle: "",
+        title: "",
         additionalPrice: 0,
     });
 
@@ -34,9 +34,9 @@ const page = () => {
 
     console.log("Status: " + status);
     useEffect(() => {
-        if (status === 'unauthenticated'){
-        router.push("/");
-      }
+        if (status === 'unauthenticated' || (session && session.user.isAdmin === false)) {
+            router.push("/");
+        }
     }, [status, router])
     
     
@@ -62,15 +62,12 @@ const page = () => {
 
         const res = await fetch("https://api.cloudinary.com/v1_1/drqexuory/image/upload", {
             method: "POST",
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
             body: data
         })
 
         const resData = await res.json();
         console.log(resData);
-        return resData.url;
+        return resData.secure_url;
     }
     const changeOption = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOption((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -90,7 +87,7 @@ const page = () => {
             });
 
             const data = await res.json();
-            //router.push(`/products/${data.id}`);
+            router.push(`/products/${data.id}`);
         
         } catch (err) {
             console.log(err);
@@ -128,7 +125,7 @@ const page = () => {
             <div className='flex flex-col gap-1 w-full'>
                 <label>Options</label>
                 <div className='flex gap-2 w-24'>
-                    <input onChange={changeOption} type="text" name='optTitle' placeholder='Option Title' className='border border-gray-300 bg-white rounded-md p-2' />
+                    <input onChange={changeOption} type="text" name='title' placeholder='Option Title' className='border border-gray-300 bg-white rounded-md p-2' />
                     <input onChange={changeOption} type="number" name='additionalPrice' placeholder='Additional Price' className='border border-gray-300 bg-white rounded-md p-2' />
                 </div>
                 <div className='bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 w-32' onClick={() => {
@@ -140,10 +137,10 @@ const page = () => {
 
             <div className='flex gap-2 w-full flex-wrap'>
                 {options.map((item) => (
-                    <div className='flex gap-2 ring-1 ring-white rounded-md p-2 w-32 bg-red-200 cursor-pointer' key={item.optTitle} onClick={() => {
-                        setOptions((prev) => prev.filter((opt) => opt.optTitle !== item.optTitle));
+                    <div className='flex gap-2 ring-1 ring-white rounded-md p-2 w-32 bg-red-200 cursor-pointer' key={item.title} onClick={() => {
+                        setOptions((prev) => prev.filter((opt) => opt.title !== item.title));
                     }}>
-                        <span>{item.optTitle}</span>
+                        <span>{item.title}</span>
                         <span>${item.additionalPrice}</span>
                     </div>
                 ))}
